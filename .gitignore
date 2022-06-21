@@ -1,0 +1,28 @@
+# ignore everything in the root.
+*
+#config
+#html
+
+# exceptions
+#!html/wp-content/
+!html/wp-config.php
+!html/wp-content/mu-plugins
+!html/wp-content/plugins
+!html/wp-content/languages
+!html/wp-content/themes
+!.gitignore
+!README.md
+
+# ignore these plugins
+#html/wp-content/plugins/hello.php
+
+# ignore specific themes
+#html/wp-content/themes/twenty*
+
+# ignore node dependency directories
+#node_modules/
+
+# ignore log files and databases
+#*.log
+#*.sql
+#*.sqlite
