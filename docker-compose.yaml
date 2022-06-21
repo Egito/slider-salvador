@@ -1,0 +1,69 @@
+version: "3.0"
+    
+services:
+  edt:
+    image: ghcr.io/linuxserver/code-server
+    container_name: sl-edt
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Fortaleza
+      - PASSWORD=${EDT_PASSWORD-default}
+#      - HASHED_PASSWORD= #optional
+      - SUDO_PASSWORD=${EDT_SUDO_PASSWORD-default}
+      - SUDO_PASSWORD_HASH= #optional
+#      - PROXY_DOMAIN=code-server.salvador.eti
+    volumes:
+      - ${PWD}/config:/config
+#      - ${PWD}/config:/app
+      - ${HOME}/.ssh:/config/.ssh
+      - ${PWD}:/home/abc/slider
+    ports:
+      - 8443:8443
+#      - 3030:3000
+    restart: unless-stopped
+
+
+  adm:
+    image: phpmyadmin
+    container_name: sl-adm
+    restart: always
+    ports:
+      - 8081:80
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - PMA_ARBITRARY=1
+
+  db:
+    image: mariadb
+    container_name: sl-db
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-default}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-default}
+      MYSQL_USER: ${MYSQL_USER:-default}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-default}
+
+  wp:
+    image: wordpress
+    container_name: sl-wp
+    depends_on:
+      - db
+    volumes:
+      - ${PWD}/html:/var/www/html
+    ports:
+      - 80:80
+    restart: always
+    environment:
+      PUID: 1000
+      PGID: 1000
+      WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST:-default}
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER:-default}
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD:-default}
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME:-default}
+
+volumes:
+  db_data: {}

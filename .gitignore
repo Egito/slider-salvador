@@ -1,26 +1,26 @@
 # ignore everything in the root.
-*
-#config
-#html
+config/
+html/*
+.env
+
+# ignore node dependency directories
+#node_modules/
 
 # exceptions
-#!html/wp-content/
+!html/wp-content/
 !html/wp-config.php
 !html/wp-content/mu-plugins
 !html/wp-content/plugins
 !html/wp-content/languages
 !html/wp-content/themes
-!.gitignore
+#!.gitignore
 !README.md
 
 # ignore these plugins
-#html/wp-content/plugins/hello.php
+html/wp-content/plugins/hello.php
 
 # ignore specific themes
-#html/wp-content/themes/twenty*
-
-# ignore node dependency directories
-#node_modules/
+html/wp-content/themes/twenty*
 
 # ignore log files and databases
 #*.log
