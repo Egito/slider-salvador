@@ -22,6 +22,9 @@ html/wp-content/plugins/hello.php
 # ignore specific themes
 html/wp-content/themes/twenty*
 
+# ignore specific uploads
+html/wp-content/uploads/
+
 # ignore log files and databases
 #*.log
 #*.sql

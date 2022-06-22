@@ -4,13 +4,15 @@ services:
   edt:
     image: ghcr.io/linuxserver/code-server
     container_name: sl-edt
+    env_file:
+      - .env
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID=${PUID:-default}
+      - PGID=${PGID:-default}
       - TZ=America/Fortaleza
-      - PASSWORD=${EDT_PASSWORD-default}
+      - PASSWORD=${EDT_PASSWORD:-default}
 #      - HASHED_PASSWORD= #optional
-      - SUDO_PASSWORD=${EDT_SUDO_PASSWORD-default}
+      - SUDO_PASSWORD=${EDT_SUDO_PASSWORD:-default}
       - SUDO_PASSWORD_HASH= #optional
 #      - PROXY_DOMAIN=code-server.salvador.eti
     volumes:
@@ -27,25 +29,27 @@ services:
   adm:
     image: phpmyadmin
     container_name: sl-adm
-    restart: always
     ports:
       - 8081:80
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID=${PUID:-default}
+      - PGID=${PGID:-default}
       - PMA_ARBITRARY=1
+    restart: always
 
   db:
     image: mariadb
     container_name: sl-db
     volumes:
       - db_data:/var/lib/mysql
-    restart: always
+    env_file:
+      - .env
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-default}
       MYSQL_DATABASE: ${MYSQL_DATABASE:-default}
       MYSQL_USER: ${MYSQL_USER:-default}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD:-default}
+    restart: always
 
   wp:
     image: wordpress
@@ -56,14 +60,16 @@ services:
       - ${PWD}/html:/var/www/html
     ports:
       - 80:80
-    restart: always
+    env_file:
+      - .env
     environment:
-      PUID: 1000
-      PGID: 1000
-      WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST:-default}
-      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER:-default}
-      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD:-default}
-      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME:-default}
+      PUID: ${PUID:-default}
+      PGID: ${PGID:-default}
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_NAME: ${MYSQL_DATABASE:-default}
+      WORDPRESS_DB_USER: ${MYSQL_USER:-default}
+      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD:-default}
+    restart: always
 
 volumes:
   db_data: {}

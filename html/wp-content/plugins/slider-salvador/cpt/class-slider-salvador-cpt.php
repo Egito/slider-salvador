@@ -4,11 +4,11 @@ class Slider_Salvador_Post_Type
 {
     function __construct()
     {
-        add_action('init', array($this, 'create_post_type'));
+        add_action('init', array($this, 'slider_cpt'));
         add_action('add_meta_boxes', array($this, 'add_meta_boxes'));
     }
 
-    public function create_post_type()
+    public function slider_cpt()
     {
         register_post_type('slider-salvador', array(
             'label' => 'Slider',
@@ -33,7 +33,23 @@ class Slider_Salvador_Post_Type
             'publicly_queryable' => true,
             'show_in_rest' => false, // editor de blocos ativo ou nao
             'menu_icon' => 'dashicons-format-gallery',
-//            'register_meta_box_cb' => array($this, 'add_meta_boxes'), // registro de meta box -> campos complementares do post customizado
+            //            'register_meta_box_cb' => array($this, 'add_meta_boxes'), // registro de meta box -> campos complementares do post customizado
         ));
+    }
+    public function add_meta_boxes()
+    {
+        add_meta_box(
+            'slider-salvador-meta-box',
+            'Links Options',
+            array($this, 'add_inner_meta_boxes'),
+            'slider-salvador',
+            'normal',
+            'high',
+        );
+    }
+
+    public function add_inner_meta_boxes($post)
+    {
+        require_once(SS_PATH . 'views/slider-salvador-metabox.php');
     }
 }
